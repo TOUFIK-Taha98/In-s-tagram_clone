@@ -71,6 +71,15 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
   }
+}
+
+
+@layer components {
+  .navLink {
+    @apply md:!my-1.5 !px-3 w-full;
+  }
+
+  /* 1:32:32 */
 }
