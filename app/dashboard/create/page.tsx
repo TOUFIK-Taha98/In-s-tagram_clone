@@ -1,6 +1,6 @@
 "use client";
 
-// import Error from "@/components/Error";
+import Error from "@/components/Error";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import useMount from "@/hooks/useMount";
+import { createPost } from "@/lib/ServerActions/actions";
 import { CreatePost } from "@/lib/schemas";
 // import useMount from "@/hooks/useMount";
 // import { createPost } from "@/lib/actions";
@@ -68,7 +69,11 @@ const CreatePage = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(async (values) => {
-                console.log(values);
+                const res = await createPost(values);
+
+                if (res) {
+                  return toast.error(<Error res={res} />);
+                }
               })}
               className="space-y-4"
             >
