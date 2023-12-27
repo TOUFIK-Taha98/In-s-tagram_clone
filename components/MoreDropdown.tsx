@@ -24,6 +24,7 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@radix-ui/react-label";
 import { Switch } from "./ui/switch";
+import { signOut } from "next-auth/react";
 
 const MoreDropdown = () => {
   const [showModeToggle, setShowModeToggle] = useState(false);
@@ -93,10 +94,10 @@ const MoreDropdown = () => {
               <p>Switch appearance</p>
             </DropdownMenuItem>
 
-            {/* <DropdownMenuItem className="menuItem" onClick={() => signOut()}>
+            <DropdownMenuItem className="menuItem" onClick={() => signOut()}>
               <LogOut size={20} />
               <p>Log out</p>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </>
         )}
 
