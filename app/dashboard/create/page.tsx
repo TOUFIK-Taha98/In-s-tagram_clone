@@ -25,7 +25,7 @@ import { CreatePost } from "@/lib/schemas";
 // import useMount from "@/hooks/useMount";
 // import { createPost } from "@/lib/actions";
 // import { CreatePost } from "@/lib/schemas";
-// import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -91,7 +91,7 @@ const CreatePage = () => {
                     <FormItem>
                       <FormLabel htmlFor="picture">Picture</FormLabel>
                       <FormControl>
-                        {/* <UploadButton
+                        <UploadButton
                           endpoint="imageUploader"
                           onClientUploadComplete={(res) => {
                             form.setValue("fileUrl", res[0].url);
@@ -101,7 +101,7 @@ const CreatePage = () => {
                             console.error(error);
                             toast.error("Upload failed");
                           }}
-                        /> */}
+                        />
                       </FormControl>
                       <FormDescription>
                         Upload a picture to post.
