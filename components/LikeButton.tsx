@@ -1,8 +1,11 @@
 "use client";
 
 import { PostWithExtras } from "@/lib/definitions";
+import { cn } from "@/lib/utils";
 import { Like } from "@prisma/client";
+import { Heart } from "lucide-react";
 import { useOptimistic } from "react";
+import ActionIcon from "./ActionIcon";
 
 interface LikeButtonProps {
   post: PostWithExtras;
@@ -34,13 +37,13 @@ const LikeButton = ({ post, userId }: LikeButtonProps) => {
       >
         <input type="hidden" name="postId" value={post.id} />
 
-        {/* <ActionIcon>
+        <ActionIcon>
           <Heart
             className={cn("h-6 w-6", {
               "text-red-500 fill-red-500": optimisticLikes.some(predicate),
             })}
           />
-        </ActionIcon> */}
+        </ActionIcon>
       </form>
       {optimisticLikes.length > 0 && (
         <p className="text-sm font-bold dark:text-white">
