@@ -56,7 +56,7 @@ const MoreDropdown = () => {
           onClick={() => setOpen(!open)}
           variant={"ghost"}
           size={"lg"}
-          className="md:w-full !justify-start space-x-2 !px-3"
+          className="menuItem "
         >
           <Menu />
           <div className="hidden lg:bock">More</div>

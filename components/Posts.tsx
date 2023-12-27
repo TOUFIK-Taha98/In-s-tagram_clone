@@ -1,6 +1,15 @@
-const Posts = () => {
-  // TODO: Implement data fetching logic here...
+import { fetchPosts } from "@/lib/FetchingData/data";
+import Post from "./Post";
 
-  return <>{/* Map through posts */}</>;
+const Posts = async () => {
+  const posts = await fetchPosts();
+
+  return (
+    <>
+      {posts.map((post) => (
+        <Post key={post.id} post={post} />
+      ))}
+    </>
+  );
 };
 export default Posts;
