@@ -1,4 +1,5 @@
 import Posts from "@/components/Posts";
+import { PostsSkeleton } from "@/components/Skeletons";
 import { Suspense } from "react";
 
 const DashboardPage = () => {
@@ -6,11 +7,7 @@ const DashboardPage = () => {
     <main className="flex w-full flex-grow">
       <div className="flex flex-col flex-1 gap-y-8 max-w-lg mx-auto pb-20">
         {/* using suspense */}
-        <Suspense
-        // fallback={
-        // <PostsSkeleton />
-        // }
-        >
+        <Suspense fallback={<PostsSkeleton />}>
           <Posts />
         </Suspense>
       </div>
