@@ -40,12 +40,14 @@ const Post = async ({ post }: { post: PostWithExtras }) => {
       </div>
 
       <Card className="relative h-[450px] w-full overflow-hidden rounded-none sm:rounded-md border-none">
-        <Image
-          src={post.fileUrl}
-          alt="Post Image"
-          fill
-          className="sm:rounded-md object-cover"
-        />
+        <Link href={`/dashboard/p/${post.id}`}>
+          <Image
+            src={post.fileUrl}
+            alt="Post Image"
+            fill
+            className="sm:rounded-md object-cover"
+          />
+        </Link>
       </Card>
 
       <PostActions post={post} userId={userId} className="px-3 sm:px-0" />
