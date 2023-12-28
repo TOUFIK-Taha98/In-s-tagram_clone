@@ -1,8 +1,9 @@
 import { auth } from "@/auth";
-import FollowButton from "@/components/FollowButton";
-import ProfileAvatar from "@/components/ProfileAvatar";
 import ProfileHeader from "@/components/ProfileHeader";
-import ProfileTabs from "@/components/ProfileTabs";
+// import FollowButton from "@/components/FollowButton";
+// import ProfileAvatar from "@/components/ProfileAvatar";
+// import ProfileHeader from "@/components/ProfileHeader";
+// import ProfileTabs from "@/components/ProfileTabs";
 import UserAvatar from "@/components/UserAvatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { fetchProfile } from "@/lib/FetchingData/data";
@@ -33,8 +34,25 @@ export async function generateMetadata(
   };
 }
 
-function ProfileLayout({ children, params: { username } }: Props) {
-  return <div>{children}</div>;
+async function ProfileLayout({ children, params: { username } }: Props) {
+  const profile = await fetchProfile(username);
+  const session = await auth();
+  const isCurrentUser = session?.user.id === profile?.id;
+  //   the followerId here is the id of the user who is following the profile
+  const isFollowing = profile?.followedBy.some(
+    (user) => user.followerId === session?.user.id
+  );
+
+  if (!profile) {
+    notFound();
+  }
+
+  return (
+    <>
+      <ProfileHeader username={profile.username} />
+      {children}
+    </>
+  );
 }
 
 export default ProfileLayout;
