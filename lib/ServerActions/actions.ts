@@ -5,7 +5,7 @@ import { getUserId } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { CreatePost, DeletePost, LikeSchema } from "../schemas";
+import { BookmarkSchema, CreatePost, DeletePost, LikeSchema } from "../schemas";
 
 export async function createPost(values: z.infer<typeof CreatePost>) {
   const userId = await getUserId();
@@ -132,5 +132,64 @@ export async function likePost(value: FormDataEntryValue | null) {
     };
   } catch (error) {
     return { message: "Database Error: Failed to Like Post." };
+  }
+}
+
+export async function bookmarkPost(value: FormDataEntryValue | null) {
+  const userId = await getUserId();
+
+  const validatedFields = BookmarkSchema.safeParse({ postId: value });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing fields. Failed to Bookmark Post.",
+    };
+  }
+
+  const { postId } = validatedFields.data;
+
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  const bookmark = await prisma.savedPost.findUnique({
+    where: {
+      postId_userId: { postId, userId },
+    },
+  });
+
+  if (bookmark) {
+    try {
+      await prisma.savedPost.delete({
+        where: {
+          postId_userId: { postId, userId },
+        },
+      });
+
+      revalidatePath("/dashboard");
+      return { message: "Unbookmarked Post successfully." };
+    } catch (error) {
+      return { message: "Database Error. Failed to Unbookmark Post." };
+    }
+  }
+
+  try {
+    await prisma.savedPost.create({
+      data: {
+        postId,
+        userId,
+      },
+    });
+    revalidatePath("/dashboard");
+    return { message: "Bookmarked Post successfully." };
+  } catch (error) {
+    return { message: "Database Error. Failed to Unbookmark Post." };
   }
 }
