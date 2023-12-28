@@ -9,6 +9,7 @@ import {
   BookmarkSchema,
   CreateComment,
   CreatePost,
+  DeleteComment,
   DeletePost,
   LikeSchema,
 } from "../schemas";
@@ -240,6 +241,39 @@ export async function createComment(values: z.infer<typeof CreateComment>) {
   } catch (error) {
     return {
       message: "Database Error. Failed to Create Comment. Please try again.",
+    };
+  }
+}
+
+export async function deleteComment(formData: FormData) {
+  const userId = await getUserId();
+
+  const { id } = DeleteComment.parse({
+    id: formData.get("id"),
+  });
+
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id,
+      userId,
+    },
+  });
+
+  if (!comment) {
+    throw new Error("Comment not found");
+  }
+
+  try {
+    await prisma.comment.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath("/dashboard");
+    return { message: "Comment deleted." };
+  } catch (error) {
+    return {
+      message: "Database error. Failed to delete comment",
     };
   }
 }
