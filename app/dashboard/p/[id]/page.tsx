@@ -1,5 +1,6 @@
+import MorePosts from "@/components/MorePosts";
 import SinglePost from "@/components/SinglePost";
-import { SinglePostSkeleton } from "@/components/Skeletons";
+import { MorePostsSkeleton, SinglePostSkeleton } from "@/components/Skeletons";
 import { Separator } from "@/components/ui/separator";
 import { Suspense } from "react";
 
@@ -18,9 +19,9 @@ const PostPage = ({ params: { id } }: PostPageProps) => {
 
       <Separator className="my-12 max-w-3xl lg:max-w-4xl mx-auto" />
 
-      {/* <Suspense fallback="Loading">
+      <Suspense fallback={<MorePostsSkeleton />}>
         <MorePosts postId={id} />
-      </Suspense> */}
+      </Suspense>
     </div>
   );
 };

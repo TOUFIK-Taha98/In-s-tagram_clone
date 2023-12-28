@@ -122,3 +122,21 @@ export function SinglePostSkeleton() {
     </Card>
   );
 }
+
+export function MorePostsSkeleton() {
+  return (
+    <div className="flex flex-col space-y-3 max-w-3xl lg:max-w-4xl mx-auto pb-20">
+      <Skeleton className="h-5 w-[160px] rounded-md" />
+
+      <div className="grid grid-cols-3 gap-0.5">
+        <MorePostSkeleton />
+        <MorePostSkeleton />
+        <MorePostSkeleton />
+      </div>
+    </div>
+  );
+}
+
+export function MorePostSkeleton() {
+  return <Skeleton className="h-44"></Skeleton>;
+}

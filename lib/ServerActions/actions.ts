@@ -75,6 +75,7 @@ export async function deletePost(formData: FormData) {
       },
     });
     revalidatePath("/dashboard");
+    redirect("/dashboard");
     return { message: "Deleted Post." };
   } catch (error) {
     return { message: "Database Error: Failed to Delete Post." };
