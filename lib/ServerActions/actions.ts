@@ -5,7 +5,13 @@ import { getUserId } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { BookmarkSchema, CreatePost, DeletePost, LikeSchema } from "../schemas";
+import {
+  BookmarkSchema,
+  CreateComment,
+  CreatePost,
+  DeletePost,
+  LikeSchema,
+} from "../schemas";
 
 export async function createPost(values: z.infer<typeof CreatePost>) {
   const userId = await getUserId();
@@ -191,5 +197,49 @@ export async function bookmarkPost(value: FormDataEntryValue | null) {
     return { message: "Bookmarked Post successfully." };
   } catch (error) {
     return { message: "Database Error. Failed to Unbookmark Post." };
+  }
+}
+
+export async function createComment(values: z.infer<typeof CreateComment>) {
+  const userId = await getUserId();
+
+  const validatedFields = CreateComment.safeParse(values);
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Create Comment",
+    };
+  }
+
+  const { postId, body } = validatedFields.data;
+
+  const post = await prisma.post.findUnique({
+    where: {
+      id: postId,
+    },
+  });
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  try {
+    await prisma.comment.create({
+      data: {
+        body,
+        postId,
+        userId,
+      },
+    });
+
+    revalidatePath("/dashboard");
+    return {
+      message: "Comment created successfully",
+    };
+  } catch (error) {
+    return {
+      message: "Database Error. Failed to Create Comment. Please try again.",
+    };
   }
 }

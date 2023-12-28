@@ -7,6 +7,7 @@ import { Card } from "./ui/card";
 import Image from "next/image";
 import PostActions from "./PostActions";
 import Link from "next/link";
+import Comments from "./Comments";
 
 const Post = async ({ post }: { post: PostWithExtras }) => {
   const session = await auth();
@@ -58,7 +59,7 @@ const Post = async ({ post }: { post: PostWithExtras }) => {
         </div>
       )}
 
-      {/* <Comments postId={post.id} comments={post.comments} user={session.user} /> */}
+      <Comments postId={post.id} comments={post.comments} user={session.user} />
     </div>
   );
 };
