@@ -16,3 +16,18 @@ export type PostWithExtras = Post & {
   savedBy: SavedPost[];
   user: User;
 };
+
+export type UserWithFollows = User & {
+  following: Follows[];
+  followedBy: Follows[];
+};
+
+export type FollowerWithExtras = Follows & { follower: UserWithFollows };
+export type FollowingWithExras = Follows & { following: UserWithFollows };
+
+export type UserWithExtras = User & {
+  posts: Post[];
+  saved: SavedPost[];
+  followedBy: FollowerWithExtras[];
+  following: FollowingWithExras[];
+};
