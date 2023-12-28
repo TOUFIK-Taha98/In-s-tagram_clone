@@ -13,6 +13,7 @@ import {
   DeletePost,
   LikeSchema,
   UpdatePost,
+  UpdateUser,
 } from "../schemas";
 
 export async function createPost(values: z.infer<typeof CreatePost>) {
@@ -326,4 +327,39 @@ export async function updatePost(values: z.infer<typeof UpdatePost>) {
 
   revalidatePath("/dashboard");
   redirect("/dashboard");
+}
+
+export async function updateProfile(values: z.infer<typeof UpdateUser>) {
+  const userId = await getUserId();
+
+  const validatedFields = UpdateUser.safeParse(values);
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Update Profile.",
+    };
+  }
+
+  const { bio, gender, image, name, username, website } = validatedFields.data;
+
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        username,
+        name,
+        image,
+        bio,
+        gender,
+        website,
+      },
+    });
+    revalidatePath("/dashboard");
+    return { message: "Updated Profile." };
+  } catch (error) {
+    return { message: "Database Error: Failed to Update Profile." };
+  }
 }

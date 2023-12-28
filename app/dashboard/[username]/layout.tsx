@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import ProfileAvatar from "@/components/ProfileAvatar";
 import ProfileHeader from "@/components/ProfileHeader";
 // import FollowButton from "@/components/FollowButton";
 // import ProfileAvatar from "@/components/ProfileAvatar";
@@ -50,6 +51,16 @@ async function ProfileLayout({ children, params: { username } }: Props) {
   return (
     <>
       <ProfileHeader username={profile.username} />
+      <div className="max-w-4xl mx-auto">
+        <div className="flex gap-x-5 md:gap-x-10 px-4">
+          <ProfileAvatar user={profile}>
+            <UserAvatar
+              user={profile}
+              className="w-20 h-20 md:w-36 md:h-36 cursor-pointer"
+            />
+          </ProfileAvatar>
+        </div>
+      </div>
       {children}
     </>
   );
