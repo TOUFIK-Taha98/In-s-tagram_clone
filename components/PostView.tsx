@@ -3,7 +3,6 @@
 // import CommentForm from "@/components/CommentForm";
 import PostActions from "@/components/PostActions";
 import UserAvatar from "@/components/UserAvatar";
-// import ViewPost from "@/components/ViewPost";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 // import { ScrollArea } from "@/components/ui/scroll-area";
 import useMount from "@/hooks/useMount";
@@ -16,6 +15,7 @@ import { useRef } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import MiniPost from "./MiniPost";
 import Comment from "./Comment";
+import ViewPostButton from "./ViewPostButton";
 // import MiniPost from "./MiniPost";
 // import Comment from "./Comment";
 // import MiniPost from "./MiniPost";
@@ -67,6 +67,23 @@ const PostView = ({ id, post }: PostViewProps) => {
               </>
             )}
           </ScrollArea>
+
+          <ViewPostButton className="hidden md:flex border-b" />
+
+          <div className="px-2 hidden md:block mt-auto border-b py-2.5">
+            <PostActions post={post} userId={user?.id} />
+            <time className="text-[11px] uppercase text-zinc-500 font-medium">
+              {new Date(post.createdAt).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+              })}
+            </time>
+          </div>
+          <CommentForm
+            postId={id}
+            className="hidden md:inline-flex"
+            inputRef={inputRef}
+          />
         </div>
       </DialogContent>
     </Dialog>
