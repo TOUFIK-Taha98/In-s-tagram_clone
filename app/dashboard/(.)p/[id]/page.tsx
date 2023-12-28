@@ -8,7 +8,7 @@ type Props = {
   };
 };
 
-const PostModal = async ({ params: { id } }: Props) => {
+async function PostModal({ params: { id } }: Props) {
   const post = await fetchPostById(id);
 
   if (!post) {
@@ -16,5 +16,6 @@ const PostModal = async ({ params: { id } }: Props) => {
   }
 
   return <PostView id={id} post={post} />;
-};
+}
+
 export default PostModal;

@@ -1,26 +1,23 @@
 "use client";
 
+import CommentForm from "@/components/CommentForm";
 import PostActions from "@/components/PostActions";
 import UserAvatar from "@/components/UserAvatar";
+import ViewPostButton from "@/components/ViewPostButton";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import useMount from "@/hooks/useMount";
 import { PostWithExtras } from "@/lib/definitions";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useRef } from "react";
-import { ScrollArea } from "./ui/scroll-area";
 import MiniPost from "./MiniPost";
 import Comment from "./Comment";
-import ViewPostButton from "./ViewPostButton";
-import CommentForm from "./CommentForm";
+// import MiniPost from "./MiniPost";
 
-interface PostViewProps {
-  id: string;
-  post: PostWithExtras;
-}
-
-const PostView = ({ id, post }: PostViewProps) => {
+function PostView({ id, post }: { id: string; post: PostWithExtras }) {
   const pathname = usePathname();
   const isPostModal = pathname === `/dashboard/p/${id}`;
   const router = useRouter();
@@ -65,9 +62,9 @@ const PostView = ({ id, post }: PostViewProps) => {
 
           <ViewPostButton className="hidden md:flex border-b" />
 
-          <div className="px-2 hidden md:block mt-auto border-b py-2.5">
+          <div className="px-2 hidden md:block mt-auto border-b p-2.5">
             <PostActions post={post} userId={user?.id} />
-            <time className="text-[11px] uppercase text-zinc-500 font-medium">
+            <time className="text-[11px]  uppercase text-zinc-500 font-medium">
               {new Date(post.createdAt).toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",
@@ -80,8 +77,27 @@ const PostView = ({ id, post }: PostViewProps) => {
             inputRef={inputRef}
           />
         </div>
+
+        <div className="relative overflow-hidden h-96 md:h-[500px] lg:h-[700px] xl:h-[800px] max-w-3xl w-full">
+          <Image
+            src={post.fileUrl}
+            fill
+            objectFit="cover"
+            alt="Post Image"
+            className="md:rounded-l-md object-cover"
+          />
+        </div>
+
+        <PostActions
+          post={post}
+          userId={user?.id}
+          className="md:hidden border-b p-2.5"
+        />
+        <CommentForm postId={id} className="md:hidden" inputRef={inputRef} />
+        <ViewPostButton className="md:hidden" />
       </DialogContent>
     </Dialog>
   );
-};
+}
+
 export default PostView;
