@@ -23,11 +23,11 @@ export type UserWithFollows = User & {
 };
 
 export type FollowerWithExtras = Follows & { follower: UserWithFollows };
-export type FollowingWithExras = Follows & { following: UserWithFollows };
+export type FollowingWithExtras = Follows & { following: UserWithFollows };
 
 export type UserWithExtras = User & {
   posts: Post[];
   saved: SavedPost[];
   followedBy: FollowerWithExtras[];
-  following: FollowingWithExras[];
+  following: FollowingWithExtras[];
 };
