@@ -11,6 +11,7 @@ import {
   CreatePost,
   DeleteComment,
   DeletePost,
+  FollowUser,
   LikeSchema,
   UpdatePost,
   UpdateUser,
@@ -361,5 +362,69 @@ export async function updateProfile(values: z.infer<typeof UpdateUser>) {
     return { message: "Updated Profile." };
   } catch (error) {
     return { message: "Database Error: Failed to Update Profile." };
+  }
+}
+
+export async function followUser(formData: FormData) {
+  const userId = await getUserId();
+
+  const { id } = FollowUser.parse({
+    // The id of the user we want to follow
+    id: formData.get("id"),
+  });
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const follows = await prisma.follows.findUnique({
+    where: {
+      followerId_followingId: {
+        // followerId is of the person who wants to follow
+        followerId: userId,
+        // followingId is of the person who is being followed
+        followingId: id,
+      },
+    },
+  });
+
+  if (follows) {
+    try {
+      await prisma.follows.delete({
+        where: {
+          followerId_followingId: {
+            followerId: userId,
+            followingId: id,
+          },
+        },
+      });
+      revalidatePath("/dashboard");
+      return { message: "Unfollowed User." };
+    } catch (error) {
+      return {
+        message: "Database Error: Failed to Unfollow User.",
+      };
+    }
+  }
+
+  try {
+    await prisma.follows.create({
+      data: {
+        followerId: userId,
+        followingId: id,
+      },
+    });
+    revalidatePath("/dashboard");
+    return { message: "Followed User." };
+  } catch (error) {
+    return {
+      message: "Database Error: Failed to Follow User.",
+    };
   }
 }
