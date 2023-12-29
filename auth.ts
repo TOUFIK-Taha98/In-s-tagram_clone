@@ -46,14 +46,12 @@ export const config = {
         token.id = user.id;
         return token;
       }
-
       if (!prismaUser.username) {
         await prisma.user.update({
           where: {
             id: prismaUser.id,
           },
           data: {
-            // Taha TOUFIK => tahatoufik
             username: prismaUser.name?.split(" ").join("").toLowerCase(),
           },
         });
@@ -69,7 +67,6 @@ export const config = {
     },
   },
 } satisfies NextAuthOptions;
-
 // @ts-ignore
 export default NextAuth(config);
 
