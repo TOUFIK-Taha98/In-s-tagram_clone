@@ -2,10 +2,7 @@ import { auth } from "@/auth";
 import FollowButton from "@/components/FollowButton";
 import ProfileAvatar from "@/components/ProfileAvatar";
 import ProfileHeader from "@/components/ProfileHeader";
-// import FollowButton from "@/components/FollowButton";
-// import ProfileAvatar from "@/components/ProfileAvatar";
-// import ProfileHeader from "@/components/ProfileHeader";
-// import ProfileTabs from "@/components/ProfileTabs";
+import ProfileTabs from "@/components/ProfileTabs";
 import UserAvatar from "@/components/UserAvatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { fetchProfile } from "@/lib/FetchingData/data";
@@ -21,7 +18,6 @@ type Props = {
   children: React.ReactNode;
 };
 
-// This function is to generate a dynamic metadata.
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
@@ -32,7 +28,6 @@ export async function generateMetadata(
 
   return {
     title: `${profile?.name} (@${profile?.username})`,
-    description: profile?.bio,
   };
 }
 
@@ -48,7 +43,6 @@ async function ProfileLayout({ children, params: { username } }: Props) {
   if (!profile) {
     notFound();
   }
-
   return (
     <>
       <ProfileHeader username={profile.username} />
@@ -114,10 +108,38 @@ async function ProfileLayout({ children, params: { username } }: Props) {
                 </>
               )}
             </div>
+
+            <div className="flex items-center gap-x-7">
+              <p className="font-medium">
+                <strong>{profile.posts.length} posts</strong>
+              </p>
+
+              <Link
+                href={`/dashboard/${profile.username}/followers`}
+                className="font-medium"
+              >
+                <strong>{profile.followedBy.length}</strong> followers
+              </Link>
+
+              <Link
+                href={`/dashboard/${profile.username}/following`}
+                className="font-medium"
+              >
+                <strong>{profile.following.length}</strong> following
+              </Link>
+            </div>
+
+            <div className="text-sm">
+              <div className="font-bold">{profile.name}</div>
+              <p>{profile.bio}</p>
+            </div>
           </div>
         </div>
+
+        <ProfileTabs profile={profile} isCurrentUser={isCurrentUser} />
+
+        {children}
       </div>
-      {children}
     </>
   );
 }
