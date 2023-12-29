@@ -15,19 +15,9 @@ const profileTabs = [
     Icon: Grid3X3,
   },
   {
-    title: "Reels",
-    href: "reels",
-    Icon: Clapperboard,
-  },
-  {
     title: "Saved",
     href: "saved",
     Icon: Bookmark,
-  },
-  {
-    title: "Tagged",
-    href: "tagged",
-    Icon: Contact,
   },
 ];
 
